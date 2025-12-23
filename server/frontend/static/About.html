@@ -2,69 +2,454 @@
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: darkturquoise;
+            --secondary-color: rgb(97, 64, 128);
+            --accent-color: aqua;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            height: 1in;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h2 {
+            font-weight: 700;
+            color: white;
+        }
+        
+        .nav-link {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 0 5px;
+            padding: 8px 16px !important;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: white !important;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .about-hero {
+            background: linear-gradient(135deg, rgba(97, 64, 128, 0.9) 0%, rgba(0, 206, 209, 0.85) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-hero:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('/static/car_dealership.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .about-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        /* Mission Section */
+        .mission-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 50px;
+            margin: 0 auto 60px;
+            width: 85%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .mission-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2.2rem;
+            position: relative;
+        }
+        
+        .mission-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .mission-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: center;
+        }
+        
+        /* Team Section */
+        .team-section {
+            padding: 0 5% 80px;
+        }
+        
+        .team-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+        
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            width: 320px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: none;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .team-card-img {
+            height: 280px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 4px solid var(--primary-color);
+        }
+        
+        .team-card-body {
+            padding: 25px;
+        }
+        
+        .team-card-title {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: -25px -25px 20px -25px;
+        }
+        
+        .team-card-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .team-card-text {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: center;
+            min-height: 120px;
+        }
+        
+        .team-card-email {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .team-card-email a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .team-card-email a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .team-social a {
+            width: 36px;
+            height: 36px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .team-social a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 0;
+            margin-top: 60px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .about-footer {
+            background-color: #222;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .about-footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-hero p {
+                font-size: 1.1rem;
+                padding: 0 20px;
+            }
+            
+            .mission-section {
+                padding: 30px;
+                width: 90%;
+            }
+            
+            .mission-title {
+                font-size: 1.8rem;
+            }
+            
+            .team-title {
+                font-size: 2rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
-<div>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-    <div class="container-fluid">
-      <h2 style="padding-right: 5%;">Dealerships</h2>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <h1>About Us</h1>
-       Welcome to Best Cars dealership, a premier automotive destination with branches spinning across the United States. Committed to excellence, we pride ourselves on providing top tier customer service, a vast selection of quality vehicles, and an unwavering dedication to meeting the diverse automotive needs of our valued customers nationwide. At each of our locations, our team is driven by a passion for delivering experiences, making us your trusted partner on the need for automotive satisfaction.
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/john_wilton.jpg" alt="Card image">
-        <div class="card-body">
-          <p class="title">CEO</p>
-          <p>John Wilton</p>
-          <p class="card-text">John steers the business towards success with strategic leaderships, cultivating a customer centric environment for automotive excellence.</p>
-          <p>jwilton@bestcars.com</p>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <h2 style="padding-right: 5%;">Dealerships</h2>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/emma_coot.jpg" alt="Card image">
-        <div class="card-body">
-          <p class="title">CMO</p>
-          <p>Emma Coot</p>
-          <p class="card-text">Emma ochestrates innovative marketing campaigns, driving brand visibility and consumer engagement, shaping the company's narrative in the competitive landscape.</p>
-          <p>ecoot@bestcars.com</p>
-        </div>
-      </div>
-
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/ensei_uchida.jpg" alt="Card image">
-        <div class="card-body">
-          <p class="title">CFO</p>
-          <p>Ensei Uchida</p>
-          <p class="card-text">Ensei oversees the financial health of the company, leveraging astute financial strategies to optimize resources and ensure fiscal responsibility for sustained growth.</p>
-          <p>euchida@bestcars.com</p>
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
+    </nav>
     
-</div>
-
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About Best Cars Dealership</h1>
+            <p>Welcome to Best Cars dealership, a premier automotive destination with branches spanning across the United States. Committed to excellence, we pride ourselves on providing top-tier customer service, a vast selection of quality vehicles, and an unwavering dedication to meeting the diverse automotive needs of our valued customers nationwide.</p>
+        </div>
+    </section>
+    
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <h2 class="mission-title">Our Mission</h2>
+        <p class="mission-text">At each of our locations, our team is driven by a passion for delivering exceptional experiences, making us your trusted partner in the pursuit of automotive satisfaction. We combine industry expertise with genuine care to ensure every customer drives away with confidence and a smile.</p>
+    </section>
+    
+    <!-- Team Section -->
+    <section class="team-section">
+        <h2 class="team-title">Our Leadership Team</h2>
+        <div class="team-container">
+            <!-- CEO Card -->
+            <div class="team-card">
+                <img class="team-card-img" src="/static/john_wilton.jpg" alt="John Wilton">
+                <br></br>
+                <div class="team-card-title">CEO</div>
+                <div class="team-card-body">
+                    <h3 class="team-card-name">John Wilton</h3>
+                    <p class="team-card-text">John steers the business towards success with strategic leadership, cultivating a customer-centric environment for automotive excellence and innovation.</p>
+                    <div class="team-card-email">
+                        <a href="mailto:jwilton@bestcars.com">
+                            <i class="fas fa-envelope"></i> jwilton@bestcars.com
+                        </a>
+                    </div>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CMO Card -->
+            <div class="team-card">
+                <img class="team-card-img" src="/static/emma_coot.jpg" alt="Emma Coot">
+                <br></br>
+                <div class="team-card-title">CMO</div>
+                <div class="team-card-body">
+                    <h3 class="team-card-name">Emma Coot</h3>
+                    <p class="team-card-text">Emma orchestrates innovative marketing campaigns, driving brand visibility and consumer engagement, shaping the company's narrative in the competitive landscape.</p>
+                    <div class="team-card-email">
+                        <a href="mailto:ecoot@bestcars.com">
+                            <i class="fas fa-envelope"></i> ecoot@bestcars.com
+                        </a>
+                    </div>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CFO Card -->
+            <div class="team-card">
+                <img class="team-card-img" src="/static/ensei_uchida.jpg" alt="Ensei Uchida">
+                <br></br>
+                <div class="team-card-title">CFO</div>
+                <div class="team-card-body">
+                    <h3 class="team-card-name">Ensei Uchida</h3>
+                    <p class="team-card-text">Ensei oversees the financial health of the company, leveraging astute financial strategies to optimize resources and ensure fiscal responsibility for sustained growth.</p>
+                    <div class="team-card-email">
+                        <a href="mailto:euchida@bestcars.com">
+                            <i class="fas fa-envelope"></i> euchida@bestcars.com
+                        </a>
+                    </div>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-text">Dealership Locations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">25+</div>
+                <div class="stat-text">Years of Experience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500K+</div>
+                <div class="stat-text">Satisfied Customers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-text">Vehicle Brands</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="about-footer">
+        <div class="container">
+            <p>&copy; 2025 Best Cars Dealership. All rights reserved.</p>
+            <p>Your trusted partner for quality vehicles across the United States</p>
+        </div>
+    </footer>
+</body>
 </html>
