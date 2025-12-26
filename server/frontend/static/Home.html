@@ -263,24 +263,46 @@
 <script>
 
 const logout = async (e) => {
-// Build logout URL and Make GET request to logout endpoint
-    let logout_url = window.location.origin+"/djangoapp/logout";
+  // Prevent default if called from event
+  if (e) e.preventDefault();
+  
+  // Get username before clearing
+  const username = sessionStorage.getItem('username');
+  
+  try {
+    // Build logout URL and Make POST request to logout endpoint
+    let logout_url = window.location.origin + "/djangoapp/logout";
     const res = await fetch(logout_url, {
-        method: "GET",
+      method: "POST",  // Changed from GET to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    
     const json = await res.json();
+    
     if (json) {
-        // Clear session storage and reload page
-        let username = sessionStorage.getItem('username');
-        sessionStorage.removeItem('username');
-        window.location.href = window.location.origin;
-        window.location.reload();
-        // Notify user of logout
-        alert("Logging out "+username+"...") 
+      // Notify user of logout
+      alert("Logging out " + username + "...");
+      
+      // Clear session storage
+      sessionStorage.removeItem('username');
+      
+      // Redirect to home page (single redirect)
+      window.location.href = window.location.origin;
+      
+    } else {
+      alert("The user could not be logged out.");
     }
-    else {
-        alert("The user could not be logged out.")
-    }
+    
+  } catch (error) {
+    console.error('Logout error:', error);
+    
+    // Fallback: clear storage and redirect even if API fails
+    alert("Logging out " + username + " (offline)...");
+    sessionStorage.removeItem('username');
+    window.location.href = window.location.origin;
+  }
 };
 
 let checkSession = ()=>{

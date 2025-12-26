@@ -16,7 +16,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
 
 
 # Quick-start development settings - unsuitable for production
@@ -66,8 +65,6 @@ TEMPLATES = [
             os.path.join(BASE_DIR,'frontend/static'),
             os.path.join(BASE_DIR,'frontend/build'),
             os.path.join(BASE_DIR,'frontend/build/static'),
-            os.path.join(REACT_APP_DIR, 'public'),
-            os.path.join(REACT_APP_DIR, 'build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -145,6 +142,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'frontend/static'),
     os.path.join(BASE_DIR,'frontend/build'),
     os.path.join(BASE_DIR,'frontend/build/static'),
-    os.path.join(REACT_APP_DIR, 'public'),
 ]
 

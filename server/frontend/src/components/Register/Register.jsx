@@ -6,95 +6,177 @@ import password_icon from "../assets/password.png"
 import close_icon from "../assets/close.png"
 
 const Register = () => {
-// State variables for form inputs
+  // State variables for form inputs
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setlastName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
-// Redirect to home
-  const gohome = ()=> {
+  // Redirect to home
+  const gohome = (e) => {
+    e.preventDefault();
     window.location.href = window.location.origin;
   }
 
-// Handle form submission
+  // Handle form submission
   const register = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setMessage({ text: "", type: "" });
 
-    let register_url = window.location.origin+"/djangoapp/register";
+    let register_url = window.location.origin + "/djangoapp/register";
 
-// Send POST request to register endpoint
-    const res = await fetch(register_url, {
+    try {
+      // Send POST request to register endpoint
+      const res = await fetch(register_url, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            "userName": userName,
-            "password": password,
-            "firstName":firstName,
-            "lastName":lastName,
-            "email":email
+          "userName": userName,
+          "password": password,
+          "firstName": firstName,
+          "lastName": lastName,
+          "email": email
         }),
-    });
+      });
 
-    const json = await res.json();
-    if (json.status) {
-    // Save username in session and reload home
+      const json = await res.json();
+      
+      if (json.status) {
+        // Save username in session and reload home
         sessionStorage.setItem('username', json.userName);
-        window.location.href = window.location.origin;
+        setMessage({ text: "Registration successful! Redirecting...", type: "success" });
+        setTimeout(() => {
+          window.location.href = window.location.origin;
+        }, 1500);
+      }
+      else if (json.error === "Already Registered") {
+        setMessage({ text: "The user with this username is already registered.", type: "error" });
+      } else {
+        setMessage({ text: "Registration failed. Please try again.", type: "error" });
+      }
+    } catch (error) {
+      setMessage({ text: "Network error. Please check your connection.", type: "error" });
+    } finally {
+      setIsLoading(false);
     }
-    else if (json.error === "Already Registered") {
-      alert("The user with same username is already registered");
-      window.location.href = window.location.origin;
-    }
-};
+  };
 
-  return(
-    <div className="register_container" style={{width: "50%"}}>
-      <div className="header" style={{display: "flex",flexDirection: "row", justifyContent: "space-between"}}>
-          <span className="text" style={{flexGrow:"1"}}>SignUp</span> 
-          <div style={{display: "flex",flexDirection: "row", justifySelf: "end", alignSelf: "start" }}>
-          <a href="/" onClick={()=>{gohome()}} style={{justifyContent: "space-between", alignItems:"flex-end"}}>
-            <img style={{width:"1cm"}} src={close_icon} alt="X"/>
-          </a>
-          </div>
-          <hr/>
-        </div>
+  return (
+    <div className="register_container">
+      <div className="header">
+        <span className="text">Create Account</span>
+        <a href="/" onClick={gohome} className="close_button">
+          <img src={close_icon} alt="Close" />
+        </a>
+      </div>
 
-        <form onSubmit={register}>
+      <form onSubmit={register}>
         <div className="inputs">
-          <div className="input">
-            <img src={user_icon} className="img_icon" alt='Username'/>
-            <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
-          </div>
-          <div>
-            <img src={user_icon} className="img_icon" alt='First Name'/>
-            <input type="text"  name="first_name" placeholder="First Name" className="input_field" onChange={(e) => setFirstName(e.target.value)}/>
-          </div>
-
-          <div>
-            <img src={user_icon} className="img_icon" alt='Last Name'/>
-            <input type="text"  name="last_name" placeholder="Last Name" className="input_field" onChange={(e) => setlastName(e.target.value)}/>
-          </div>
-
-          <div>
-            <img src={email_icon} className="img_icon" alt='Email'/>
-            <input type="email"  name="email" placeholder="email" className="input_field" onChange={(e) => setEmail(e.target.value)}/>
+          {/* Username */}
+          <div className="input_row">
+            <div className="img_icon">
+              <img src={user_icon} alt="Username" />
+            </div>
+            <input 
+              type="text" 
+              name="username" 
+              placeholder="Username" 
+              className="input_field" 
+              onChange={(e) => setUserName(e.target.value)}
+              required
+            />
           </div>
 
-          <div className="input">
-            <img src={password_icon} className="img_icon" alt='password'/>
-            <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>
+          {/* First Name */}
+          <div className="input_row">
+            <div className="img_icon">
+              <img src={user_icon} alt="First Name" />
+            </div>
+            <input 
+              type="text" 
+              name="first_name" 
+              placeholder="First Name" 
+              className="input_field" 
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
           </div>
 
+          {/* Last Name */}
+          <div className="input_row">
+            <div className="img_icon">
+              <img src={user_icon} alt="Last Name" />
+            </div>
+            <input 
+              type="text" 
+              name="last_name" 
+              placeholder="Last Name" 
+              className="input_field" 
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Email */}
+          <div className="input_row">
+            <div className="img_icon">
+              <img src={email_icon} alt="Email" />
+            </div>
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Email Address" 
+              className="input_field" 
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div className="input_row">
+            <div className="img_icon">
+              <img src={password_icon} alt="Password" />
+            </div>
+            <input 
+              name="password" 
+              type="password" 
+              placeholder="Password" 
+              className="input_field" 
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength="6"
+            />
+          </div>
         </div>
+
+        {/* Message Display */}
+        {message.text && (
+          <div className={`form_message ${message.type}`}>
+            {message.text}
+          </div>
+        )}
+
         <div className="submit_panel">
-          <input className="submit" type="submit" value="Register"/>
+          <button 
+            type="submit" 
+            className={`submit ${isLoading ? 'loading' : ''}`}
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating Account..." : "Create Account"}
+          </button>
+
+          <div className="login_link">
+            Already have an account? <a href="/login">Sign In</a>
+          </div>
         </div>
       </form>
-      </div>
+    </div>
   )
 }
 
