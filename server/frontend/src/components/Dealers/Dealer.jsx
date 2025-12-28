@@ -25,30 +25,63 @@ const Dealer = () => {
   let post_review = root_url+`postreview/${id}`;
   
   const get_dealer = async ()=>{
+    try {
     const res = await fetch(dealer_url, {
       method: "GET"
     });
-    const retobj = await res.json();
     
-    if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      setDealer(dealerobjs[0])
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
+    
+    const retobj = await res.json();
+    console.log('Dealer API Response:', retobj); // Debug
+    
+    if (retobj.status === 200) {
+      // Handle both array and object formats
+      if (Array.isArray(retobj.dealer)) {
+        setDealer(retobj.dealer[0] || {});
+      } else if (retobj.dealer && typeof retobj.dealer === 'object') {
+        setDealer(retobj.dealer);
+      } else {
+        console.warn('Unexpected dealer format:', retobj.dealer);
+        setDealer({});
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error fetching dealer:', error);
+    setDealer({});
+  }
   }
 
   const get_reviews = async ()=>{
+    try {
     const res = await fetch(reviews_url, {
       method: "GET"
     });
-    const retobj = await res.json();
     
-    if(retobj.status === 200) {
-      if(retobj.reviews.length > 0){
-        setReviews(retobj.reviews)
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
+    const retobj = await res.json();
+    console.log('API Response:', retobj); // Debug
+    
+    if (retobj.status === 200) {
+      if (retobj.reviews && retobj.reviews.length > 0) {
+        setReviews(retobj.reviews);
       } else {
         setUnreviewed(true);
       }
+    } else {
+      setUnreviewed(true);
     }
+    
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    setUnreviewed(true);
+  }
   }
 
   const senti_icon = (sentiment)=>{

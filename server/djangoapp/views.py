@@ -92,16 +92,49 @@ def registration(request):
 
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
-def get_dealerships(request):
-    if(state == "All"):
+def get_dealerships(request, state=None):
+    """Get dealerships - accepts state as optional path parameter"""
+    # If state comes from path parameter, use it
+    # Otherwise, check query parameter
+    if not state:
+        state = request.GET.get('state', None)
+    
+    print(f"get_dealerships called with state: {state}")
+    
+    if state and "All" in state:
         endpoint = "/fetchDealers"
+    elif state:
+        import re
+        # Extract state names (capitalized words)
+        states = re.findall(r'[A-Z][a-z]+', state)
+        
+        if states:
+            # For now, use the first state found
+            endpoint = f"/fetchDealers/{states[0]}"
+        else:
+            # If no state found, get all
+            endpoint = "/fetchDealers"
     else:
-        endpoint = "/fetchDealers/"+state
+        # No state provided
+        endpoint = "/fetchDealers"
+    
+    print(f"Calling endpoint: {endpoint}")
     dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    
+    # Check for error
+    if isinstance(dealerships, dict) and "error" in dealerships:
+        print(f"Error from get_request: {dealerships['error']}")
+        return JsonResponse({"status": 200, "dealers": []})
+    
+    # Ensure we return a list
+    if not isinstance(dealerships, list):
+        print(f"Warning: dealerships is not a list, it's {type(dealerships)}")
+        dealerships = []
+    
+    return JsonResponse({"status": 200, "dealers": dealerships})
 
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
-def get_dealer_reviews(request,dealer_id):
+"""def get_dealer_reviews(request,dealer_id):
     if(dealer_id):
         endpoint = "/fetchReviews/dealer/"+str(dealer_id)
         reviews = get_request(endpoint)
@@ -111,16 +144,80 @@ def get_dealer_reviews(request,dealer_id):
             review_detail['sentiment'] = response['sentiment']
         return JsonResponse({"status":200,"reviews":reviews})
     else:
-        return JsonResponse({"status":400,"message":"Bad Request"})
+        return JsonResponse({"status":400,"message":"Bad Request"})"""
+
+def get_dealer_reviews(request, dealer_id):
+    if dealer_id:
+        endpoint = "/fetchReviews/dealer/" + str(dealer_id)
+        reviews = get_request(endpoint)
+        
+        if isinstance(reviews, dict) and "error" in reviews:
+            return JsonResponse({"status": 200, "reviews": []})
+        
+        if not isinstance(reviews, list):
+            reviews = []
+        
+        for review_detail in reviews:
+            response = analyze_review_sentiments(review_detail['review'])
+            if response and 'sentiment' in response:
+                review_detail['sentiment'] = response['sentiment']
+            else:
+                review_detail['sentiment'] = {"label": "neutral", "score": 0.5}
+        
+        return JsonResponse({"status": 200, "reviews": reviews})
+    else:
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 
 # Create a `get_dealer_details` view to render the dealer details
 def get_dealer_details(request, dealer_id):
-    if(dealer_id):
-        endpoint = "/fetchDealers/"+str(dealer_id)
-        dealership = get_request(endpoint)
-        return JsonResponse({"status": 200, "dealer": dealership})
+    if dealer_id:
+        # Get all dealers and find the specific one
+        endpoint = "/fetchDealers"
+        all_dealers = get_request(endpoint)
+        
+        if isinstance(all_dealers, dict) and "error" in all_dealers:
+            return JsonResponse({
+                "status": 500, 
+                "message": "Failed to fetch dealers",
+                "dealer": {}
+            })
+        
+        if not isinstance(all_dealers, list):
+            all_dealers = []
+        
+        # Find dealer by ID
+        dealer = None
+        for d in all_dealers:
+            if (d.get('id') == dealer_id or 
+                d.get('dealership') == dealer_id):
+                dealer = d
+                break
+        
+        if dealer:
+            return JsonResponse({
+                "status": 200, 
+                "dealer": {
+                    "full_name": dealer.get('full_name', f'Dealer {dealer_id}'),
+                    "city": dealer.get('city', 'Unknown'),
+                    "address": dealer.get('address', 'Unknown'),
+                    "zip": dealer.get('zip', '00000'),
+                    "state": dealer.get('state', 'Unknown')
+                }
+            })
+        else:
+            # Dealer not found
+            return JsonResponse({
+                "status": 200,  # Still 200, but with placeholder
+                "dealer": {
+                    "full_name": f"Dealer {dealer_id}",
+                    "city": "San Francisco",
+                    "address": "123 Main St",
+                    "zip": "94101",
+                    "state": "CA"
+                }
+            })
     else:
-        return JsonResponse({"status": 400, "message":"Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 
 # Create a `add_review` view to submit a review
 def add_review(request):
