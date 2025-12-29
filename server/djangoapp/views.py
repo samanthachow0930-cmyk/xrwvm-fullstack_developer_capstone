@@ -130,14 +130,14 @@ def get_dealerships(request, state=None):
     # Check for error
     if isinstance(dealerships, dict) and "error" in dealerships:
         print(f"Error from get_request: {dealerships['error']}")
-        return JsonResponse({"status": " 200", "dealers": []})
+        return JsonResponse({"status": 200, "dealers": []})
 
     # Ensure we return a list
     if not isinstance(dealerships, list):
         print(f"Warning: dealerships is not a list, it's {type(dealerships)}")
         dealerships = []
 
-    return JsonResponse({"status": " 200", "dealers": dealerships})
+    return JsonResponse({"status": 200, "dealers": dealerships})
 
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
 
@@ -148,7 +148,7 @@ def get_dealer_reviews(request, dealer_id):
         reviews = get_request(endpoint)
 
         if isinstance(reviews, dict) and "error" in reviews:
-            return JsonResponse({"status": " 200", "reviews": []})
+            return JsonResponse({"status": 200, "reviews": []})
 
         if not isinstance(reviews, list):
             reviews = []
@@ -160,9 +160,9 @@ def get_dealer_reviews(request, dealer_id):
             else:
                 review_detail['sentiment'] = {"label": "neutral", "score": 0.5}
 
-        return JsonResponse({"status": " 200", "reviews": reviews})
+        return JsonResponse({"status": 200, "reviews": reviews})
     else:
-        return JsonResponse({"status": " 400", "message": "Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 
 # Create a `get_dealer_details` view to render the dealer details
 
@@ -228,6 +228,6 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except BaseException:
             return JsonResponse(
-                {"status": " 401", "message": "Error in posting review"})
+                {"status": 401, "message": "Error in posting review"})
     else:
-        return JsonResponse({"status": " 403", "message": "Unauthorized"})
+        return JsonResponse({"status": 403, "message": "Unauthorized"})
