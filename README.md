@@ -103,6 +103,5 @@ The system follows a microservices architecture with the following components:
 * Independent scaling of components
 * Containerized deployment
 * Cloud-native resilience and scalability
-
-Integrated sentiment analysis for review moderation
+* Integrated sentiment analysis for review moderation
 
