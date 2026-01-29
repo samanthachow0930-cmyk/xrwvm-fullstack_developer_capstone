@@ -1,10 +1,10 @@
 # Full Stack Developer Capstone Project
 
 📋 Project Overview
-This capstone project is a full-stack, cloud-native web application for managing dealerships and customer reviews. The platform integrates multiple microservices, containerization, and cloud deployment to deliver a scalable SaaS solution.
+* This capstone project is a full-stack, cloud-native web application for managing dealerships and customer reviews. The platform integrates multiple microservices, containerization, and cloud deployment to deliver a scalable SaaS solution.
 
 🏗️ Architecture Overview
-The system follows a microservices architecture with the following components:
+* The system follows a microservices architecture with the following components:
 
 ## Frontend & Main Service
 * Technology: Django web application
@@ -39,29 +39,29 @@ The system follows a microservices architecture with the following components:
 * Orchestration: Kubernetes for deployment and scaling
 
 🛠️ Project Implementation Steps
-## Phase 1: Setup & Foundation
+### Phase 1: Setup & Foundation
 * Fork and clone the GitHub repository
 * Set up the Django project template in Cloud IDE
 * Implement static pages for initial user stories
 * Run the application locally for validation
 
-## Phase 2: User Management
+### Phase 2: User Management
 * Integrate Django authentication system
 * Develop React-based frontend for user management
 
-## Phase 3: Backend Services Development
+### Phase 3: Backend Services Development
 * Build Express.js server with MongoDB for dealership/review management
 * Dockerize the Node.js microservice
 * Deploy sentiment analyzer on IBM Cloud Code Engine
 * Create Django models/views for Car Make/Model management
 * Implement Django proxy services to integrate all microservices
 
-## Phase 4: Dynamic Frontend Development
+### Phase 4: Dynamic Frontend Development
 * Create dealer listing page with Django templates
 * Develop dealer-specific review display page
 * Implement review submission interface
 
-## Phase 5: DevOps & Deployment
+### Phase 5: DevOps & Deployment
 * Set up CI/CD pipeline for automated testing and deployment
 * Test application locally and in Cloud IDE
 * Deploy full application stack on Kubernetes
